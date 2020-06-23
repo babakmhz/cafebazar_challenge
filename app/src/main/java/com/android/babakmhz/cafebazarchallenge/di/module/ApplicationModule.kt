@@ -1,10 +1,13 @@
 package com.android.babakmhz.cafebazarchallenge.di.module
 
 import android.content.Context
-import com.android.babakmhz.cafebazarchallenge.data.ApiService
-import com.android.babakmhz.cafebazarchallenge.data.Prefs.AppPrefs
+import androidx.room.Room
+import com.android.babakmhz.cafebazarchallenge.data.db.AppDatabase
+import com.android.babakmhz.cafebazarchallenge.data.network.ApiService
+import com.android.babakmhz.cafebazarchallenge.data.prefs.AppPrefs
 import com.android.babakmhz.cafebazarchallenge.di.qualifier.ApplicationContext
 import com.android.babakmhz.cafebazarchallenge.utils.BASE_URL
+import com.android.babakmhz.cafebazarchallenge.utils.DB_NAME
 import com.android.babakmhz.cafebazarchallenge.utils.MyApp
 import com.android.babakmhz.cafebazarchallenge.utils.TIME_OUT
 import com.google.gson.GsonBuilder
@@ -48,11 +51,22 @@ internal abstract class ApplicationModule {
 
         @Provides
         @Singleton
+        fun provideAppDatabase(context: Context): AppDatabase = Room.databaseBuilder(
+            context,
+            AppDatabase::class.java,
+            DB_NAME
+        ).build()
+
+        @Provides
+        @Singleton
         fun provideAppPrefs(context: Context) = AppPrefs(context)
 
         @Provides
         @Singleton
-        fun provideAppApiService(retrofit: Retrofit): ApiService = ApiService(retrofit)
+        fun provideAppApiService(retrofit: Retrofit): ApiService =
+            ApiService(
+                retrofit
+            )
 
     }
 }

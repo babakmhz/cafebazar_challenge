@@ -1,4 +1,4 @@
-package com.android.babakmhz.cafebazarchallenge.data
+package com.android.babakmhz.cafebazarchallenge.data.network
 
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -12,5 +12,5 @@ interface ApiHelper {
         @Query("v") v: String,
         @Query("ll") latLng: String,
         @Query("limit") responseLimit: String
-    ):ApiResponse
+    ): ApiResponse
 }

@@ -1,4 +1,4 @@
-package com.android.babakmhz.cafebazarchallenge.data
+package com.android.babakmhz.cafebazarchallenge.data.network
 
 import com.google.gson.annotations.SerializedName
 

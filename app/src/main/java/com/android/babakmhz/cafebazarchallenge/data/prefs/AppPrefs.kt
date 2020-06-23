@@ -1,4 +1,4 @@
-package com.android.babakmhz.cafebazarchallenge.data.Prefs
+package com.android.babakmhz.cafebazarchallenge.data.prefs
 
 import android.content.Context
 import android.content.SharedPreferences
