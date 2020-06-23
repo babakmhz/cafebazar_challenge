@@ -11,7 +11,7 @@ interface LocationsDao {
     suspend fun getAllLocations(): List<LocationModel>
 
     @Insert
-    fun insertLocations(vararg locations: LocationModel)
+    suspend fun insertLocations(vararg locations: LocationModel)
 
 
 }
