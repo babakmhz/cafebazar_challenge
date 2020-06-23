@@ -14,7 +14,7 @@ data class LocationModel(
 
 @Entity(tableName = "Place")
 data class Location(
-    @PrimaryKey val id: Long,
+    @PrimaryKey val locationId: Long,
     @ColumnInfo val address: String,
     @ColumnInfo val lat: String,
     @ColumnInfo val lng: String,
