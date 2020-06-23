@@ -1,8 +1,12 @@
 package com.android.babakmhz.cafebazarchallenge.di.module
 
+import android.content.Context
 import com.android.babakmhz.cafebazarchallenge.data.ApiService
-import com.android.babakmhz.cafebazarchallenge.data.BASE_URL
-import com.android.babakmhz.cafebazarchallenge.data.TIME_OUT
+import com.android.babakmhz.cafebazarchallenge.data.Prefs.AppPrefs
+import com.android.babakmhz.cafebazarchallenge.di.qualifier.ApplicationContext
+import com.android.babakmhz.cafebazarchallenge.utils.BASE_URL
+import com.android.babakmhz.cafebazarchallenge.utils.MyApp
+import com.android.babakmhz.cafebazarchallenge.utils.TIME_OUT
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
@@ -19,8 +23,11 @@ internal abstract class ApplicationModule {
 
     @Module
     object AppModule {
+        @Provides
+        @Singleton
+        @ApplicationContext
+        fun provideAppContext(myApp: MyApp): Context = myApp.applicationContext
 
-        @JvmStatic
         @Provides
         @Singleton
         fun provideRetrofitClient(): Retrofit {
@@ -39,14 +46,13 @@ internal abstract class ApplicationModule {
 
         }
 
-        @JvmStatic
         @Provides
         @Singleton
-        fun provideAppApiService(retrofit: Retrofit): ApiService {
-            return ApiService(retrofit)
-        }
+        fun provideAppPrefs(context: Context) = AppPrefs(context)
 
-
+        @Provides
+        @Singleton
+        fun provideAppApiService(retrofit: Retrofit): ApiService = ApiService(retrofit)
 
     }
 }
