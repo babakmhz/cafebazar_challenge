@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.android.babakmhz.cafebazarchallenge.R
+import com.android.babakmhz.cafebazarchallenge.ui.MainViewModel
 
 class MainFragment : Fragment() {
 

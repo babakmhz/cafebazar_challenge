@@ -2,9 +2,8 @@ package com.android.babakmhz.cafebazarchallenge.di.module
 
 import android.content.Context
 import androidx.room.Room
+import com.android.babakmhz.cafebazarchallenge.BuildConfig
 import com.android.babakmhz.cafebazarchallenge.data.db.AppDatabase
-import com.android.babakmhz.cafebazarchallenge.data.network.ApiService
-import com.android.babakmhz.cafebazarchallenge.data.prefs.AppPrefs
 import com.android.babakmhz.cafebazarchallenge.di.qualifier.ApplicationContext
 import com.android.babakmhz.cafebazarchallenge.utils.BASE_URL
 import com.android.babakmhz.cafebazarchallenge.utils.DB_NAME
@@ -57,16 +56,6 @@ internal abstract class ApplicationModule {
             DB_NAME
         ).build()
 
-        @Provides
-        @Singleton
-        fun provideAppPrefs(context: Context) = AppPrefs(context)
-
-        @Provides
-        @Singleton
-        fun provideAppApiService(retrofit: Retrofit): ApiService =
-            ApiService(
-                retrofit
-            )
 
     }
 }

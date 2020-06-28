@@ -10,7 +10,7 @@ class ApiService @Inject constructor(private val retrofit: Retrofit) {
 
     suspend fun getLocation(
         clientId: String, clientSecret: String, v: String,
-        latLng: String, limit: String
+        latLng: String, limit:Int
     ): ApiResponse {
         return apiHelper.getLocations(clientId, clientSecret, v, latLng, limit)
     }

@@ -5,15 +5,14 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 29
-
     defaultConfig {
         applicationId "com.android.babakmhz.cafebazarchallenge"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
     }
     dataBinding {
         enabled true
@@ -30,6 +29,7 @@ android {
     }
 
     buildTypes {
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -44,6 +44,12 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appCompat_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraint_lyt_version"
 
+    //play services
+    implementation "com.google.android.gms:play-services-vision:$playService_version"
+    implementation "com.google.android.gms:play-services-location:$locationService_version"
+
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.maps.android:android-maps-utils:0.5+'
     //Network
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
@@ -93,6 +99,9 @@ dependencies {
     testImplementation "androidx.test.ext:junit:$junit_x_ext"
     testImplementation "android.arch.core:core-testing:$android_arch_core_testing"
     testImplementation "com.squareup.okhttp3:mockwebserver:$mockwebserver_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$couroutines_version"
     testImplementation "io.mockk:mockk:$mockk_version"
+    testImplementation "org.mockito:mockito-core:$mockitoCore_version"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlin_version"
 
 }

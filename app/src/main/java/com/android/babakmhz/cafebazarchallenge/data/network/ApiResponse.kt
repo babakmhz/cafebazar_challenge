@@ -1,5 +1,6 @@
 package com.android.babakmhz.cafebazarchallenge.data.network
 
+import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
 
 data class ApiResponse(

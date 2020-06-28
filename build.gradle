@@ -43,8 +43,10 @@ ext {
     recycler_view_version = '1.1.0'
     debugDBVersion = '1.0.6'
     circleImageView_version = '3.1.0'
-    dagger_version = "2.28"
+    dagger_version = '2.28.1'
     room_version = "2.2.5"
+    playService_version = '20.1.0'
+    locationService_version = '17.0.0'
 
     //testing libraries
     junit_x_ext = '1.1.1'
@@ -52,6 +54,8 @@ ext {
     android_arch_core_testing = '1.1.1'
     espresso_version = '3.2.0'
     retrofit_mock = '2.3.0'
+    mockitoCore_version = '2.23.0'
+    mockitoKotlin_version = '2.0.0'
     mockk_version = '1.10.0'
     espresso_contrib = '3.2.0'
 }

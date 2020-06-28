@@ -11,6 +11,6 @@ interface ApiHelper {
         @Query("client_secret") clientSecret: String,
         @Query("v") v: String,
         @Query("ll") latLng: String,
-        @Query("limit") responseLimit: String
+        @Query("limit") responseLimit: Int
     ): ApiResponse
 }
