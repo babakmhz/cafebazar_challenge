@@ -25,6 +25,9 @@ import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
+//as i noticed java programming language as your one of your preferred technologies(RxJava,MVP,etc)
+//please check this repo for my java clean MVP project
+// https://github.com/babakmhz/homefit_android
 
 class MainActivity : DaggerAppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
     GoogleApiClient.OnConnectionFailedListener, LocationListener {
