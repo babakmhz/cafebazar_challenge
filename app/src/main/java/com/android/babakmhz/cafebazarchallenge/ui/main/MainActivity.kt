@@ -4,20 +4,33 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import com.android.babakmhz.cafebazarchallenge.R
+import com.android.babakmhz.cafebazarchallenge.databinding.MainActivityBinding
+import com.android.babakmhz.cafebazarchallenge.ui.MainViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import dagger.android.support.DaggerAppCompatActivity
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : DaggerAppCompatActivity() {
 
+
+//    @Inject
+//    lateinit var viewModelFactory: ViewModelProvider.Factory
+//
+//    private val viewModel: MainViewModel by lazy {
+//        ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+//    }
 
     lateinit var locationClient: FusedLocationProviderClient
-
+    lateinit var activityBinding: MainActivityBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main_activity)
+        activityBinding = DataBindingUtil.setContentView(this, R.layout.main_activity)
+
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, MainFragment.newInstance())
@@ -49,7 +62,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun requestPermissions(){
+    private fun requestPermissions() {
 
     }
 }

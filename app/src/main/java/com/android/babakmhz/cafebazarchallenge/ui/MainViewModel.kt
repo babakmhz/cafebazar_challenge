@@ -17,11 +17,18 @@ class MainViewModel @Inject constructor(
     ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
+
     private val job = SupervisorJob()
     private val ioScope = CoroutineScope(ioDispatcher + job)
 
+    private var _selectedLocation = MutableLiveData<LocationModel>()
+    val selectedLocation: LiveData<LocationModel> get() = _selectedLocation
+
     private var _locations = MutableLiveData<LiveDataWrapper<List<LocationModel>>>()
     val locations: LiveData<LiveDataWrapper<List<LocationModel>>> = _locations
+
+    private var _myLocation = MutableLiveData<String>()
+    val myLocation: LiveData<String> get() = _myLocation
 
     private var _currentFragment = MutableLiveData<Fragment>()
     val currentFragment: LiveData<Fragment> = _currentFragment
@@ -59,13 +66,14 @@ class MainViewModel @Inject constructor(
                         val response = useCase.getLocationFromRemoteSource(lastKnownLocation)
                         _locations.postValue(LiveDataWrapper.success(response!!))
                         useCase.saveLocations(response)
+                        _loading.postValue(false)
                     } catch (ex: Exception) {
                         AppLogger.e(ex, "Exception Happened")
                         _locations.postValue(LiveDataWrapper.error(ex))
+                        _loading.postValue(false)
                     }
 
                 }
-                _loading.postValue(false)
             }
         }
     }

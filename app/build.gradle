@@ -43,6 +43,11 @@ dependencies {
     implementation "androidx.core:core-ktx:$core_ktx_version"
     implementation "androidx.appcompat:appcompat:$appCompat_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraint_lyt_version"
+    implementation "com.google.android.material:material:$material_design"
+    implementation "androidx.recyclerview:recyclerview:$recycler_view_version"
+    implementation "androidx.cardview:cardview:$cardView_version"
+    implementation "de.hdodenhof:circleimageview:$circleImageView_version"
+
 
     //play services
     implementation "com.google.android.gms:play-services-vision:$playService_version"

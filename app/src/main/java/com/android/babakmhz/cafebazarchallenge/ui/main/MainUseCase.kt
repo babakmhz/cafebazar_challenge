@@ -9,11 +9,8 @@ import com.android.babakmhz.cafebazarchallenge.data.network.ApiService
 import com.android.babakmhz.cafebazarchallenge.data.prefs.AppPrefs
 import com.android.babakmhz.cafebazarchallenge.utils.*
 import com.google.android.gms.maps.model.LatLng
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class MainUseCase @Inject constructor(
+class MainUseCase(
     private val db: AppDatabase, private val prefs: AppPrefs,
     private val apiService: ApiService
 ) {
