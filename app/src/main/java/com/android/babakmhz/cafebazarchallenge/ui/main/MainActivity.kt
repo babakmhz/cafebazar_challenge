@@ -14,6 +14,7 @@ class MainActivity : AppCompatActivity() {
 
 
     lateinit var locationClient: FusedLocationProviderClient
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
@@ -43,8 +44,12 @@ class MainActivity : AppCompatActivity() {
         }
         locationClient.lastLocation
             .addOnSuccessListener { location: Location? ->
-                // Got last known location. In some rare situations this can be null.
             }
+
+    }
+
+
+    private fun requestPermissions(){
 
     }
 }

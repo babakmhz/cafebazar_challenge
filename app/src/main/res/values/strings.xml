@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CafebazarChallenge</string>
+    <string name="loading_location">Loading locations...</string>
 </resources>
