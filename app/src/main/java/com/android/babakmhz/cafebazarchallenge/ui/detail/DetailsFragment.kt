@@ -4,12 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.android.babakmhz.cafebazarchallenge.R
 import com.android.babakmhz.cafebazarchallenge.ui.MainViewModel
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class DetailsFragment : Fragment() {
+class DetailsFragment : BottomSheetDialogFragment() {
 
     companion object {
         fun newInstance() = DetailsFragment()
@@ -21,7 +21,7 @@ class DetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.main_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_location_details, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

@@ -6,6 +6,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.android.babakmhz.cafebazarchallenge.data.db.LocationModel
+import com.android.babakmhz.cafebazarchallenge.ui.main.LoadingFragment
+import com.android.babakmhz.cafebazarchallenge.ui.main.MainFragment
 import com.android.babakmhz.cafebazarchallenge.ui.main.MainUseCase
 import com.android.babakmhz.cafebazarchallenge.utils.AppLogger
 import com.android.babakmhz.cafebazarchallenge.utils.LiveDataWrapper
@@ -20,6 +22,9 @@ class MainViewModel @Inject constructor(
     private val job = SupervisorJob()
     private val ioScope = CoroutineScope(ioDispatcher + job)
 
+    private var _locationPermission = MutableLiveData<Boolean>()
+    val locationPermission: LiveData<Boolean> get() = _locationPermission
+
     private var _selectedLocation = MutableLiveData<LocationModel>()
     val selectedLocation: LiveData<LocationModel> get() = _selectedLocation
 
@@ -28,6 +33,9 @@ class MainViewModel @Inject constructor(
 
     private var _myLocation = MutableLiveData<String>()
     val myLocation: LiveData<String> get() = _myLocation
+
+    private var _loadingText = MutableLiveData<String>()
+    val loadingText: LiveData<String> get() = _loadingText
 
     private var _currentFragment = MutableLiveData<Fragment>()
     val currentFragment: LiveData<Fragment> = _currentFragment
@@ -39,6 +47,18 @@ class MainViewModel @Inject constructor(
         _currentFragment.value = fragment
     }
 
+    fun setLocationPermission(permission: Boolean) {
+        _locationPermission.value = permission
+    }
+
+    fun setSelectedLocation(location: LocationModel) {
+        _selectedLocation.value = location
+    }
+
+    fun setLoadingText(loadingText: String) {
+        _loadingText.value = loadingText
+    }
+
     fun init() {
         _loading.value = true
         ioScope.launch {
@@ -46,20 +66,20 @@ class MainViewModel @Inject constructor(
                 val result = useCase.getLocationFromLocalSource()
                 if (result.isNotEmpty()) {
                     _loading.postValue(false)
+                    _currentFragment.postValue(MainFragment.newInstance())
                     _locations.postValue(LiveDataWrapper.success(result))
                 } else {
+                    _currentFragment.postValue(LoadingFragment.newInstance())
                     _locations.postValue(LiveDataWrapper.dataShouldLoadRemotely())
                 }
             }
         }
     }
 
-    fun handleLocationUpdates(lastKnownLocation: Location) {
+    fun handleLocationUpdates(lastKnownLocation: Location?) {
         _loading.value = true
         ioScope.launch {
-
             withContext(Dispatchers.IO) {
-
                 if (useCase.shouldRequestLocationUpdates(lastKnownLocation)) {
                     try {
                         val response = useCase.getLocationFromRemoteSource(lastKnownLocation)

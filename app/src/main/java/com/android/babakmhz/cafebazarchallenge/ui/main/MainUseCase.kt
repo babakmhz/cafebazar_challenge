@@ -27,7 +27,9 @@ class MainUseCase @Inject constructor(
         return db.getAllLocations()
     }
 
-    suspend fun getLocationFromRemoteSource(location: Location): List<LocationModel>? {
+    suspend fun getLocationFromRemoteSource(location: Location?): List<LocationModel>? {
+
+        if (location == null) return null
 
         val apiResult = apiService.getLocation(
             CLIENT_ID,

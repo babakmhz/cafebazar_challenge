@@ -51,6 +51,7 @@ ext {
     locationService_version = '17.0.0'
     cardView_version = '1.0.0'
     circleImageView_version = '3.1.0'
+    glide_version = '4.11.0'
 
 
     //testing libraries

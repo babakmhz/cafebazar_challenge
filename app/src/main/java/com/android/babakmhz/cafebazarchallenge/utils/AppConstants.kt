@@ -23,3 +23,7 @@ const val DB_NAME = "appDb"
 // location
 
 const val RADIUS_LIMIT = 100
+
+
+//permissions code
+const val LOCATION_PERMISSION_CODE = 100

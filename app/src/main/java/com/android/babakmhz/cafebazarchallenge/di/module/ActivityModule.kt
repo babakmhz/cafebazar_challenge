@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.android.babakmhz.cafebazarchallenge.di.Scope.PerActivity
 import com.android.babakmhz.cafebazarchallenge.di.qualifier.ActivityContext
 import com.android.babakmhz.cafebazarchallenge.ui.MainViewModel
-import com.android.babakmhz.cafebazarchallenge.ui.main.MainActivity
+import com.android.babakmhz.cafebazarchallenge.ui.MainActivity
 import com.android.babakmhz.cafebazarchallenge.utils.ViewModelKey
 import dagger.Binds
 import dagger.Module

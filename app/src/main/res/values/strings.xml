@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">CafebazarChallenge</string>
     <string name="loading_location">Please wait while determining your location...</string>
+    <string name="accept_permission">Please accept permission for app to work</string>
 </resources>

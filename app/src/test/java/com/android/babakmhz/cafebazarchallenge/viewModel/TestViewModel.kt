@@ -29,7 +29,7 @@ class TestViewModel {
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        viewModel = MainViewModel(useCase, Dispatchers.IO)
+        viewModel = MainViewModel(useCase)
     }
 
     @Test
