@@ -18,9 +18,9 @@ class MainViewModel @Inject constructor(
     private val useCase: MainUseCase
 ) : ViewModel() {
 
-    private val ioDispatcher = Dispatchers.IO
+    private val ioDispatcher = Dispatchers.Main
     private val job = SupervisorJob()
-    private val ioScope = CoroutineScope(ioDispatcher + job)
+    private val uiScope = CoroutineScope(ioDispatcher + job)
 
     private var _locationPermission = MutableLiveData<Boolean>()
     val locationPermission: LiveData<Boolean> get() = _locationPermission
@@ -61,14 +61,16 @@ class MainViewModel @Inject constructor(
 
     fun init() {
         _loading.value = true
-        ioScope.launch {
+        uiScope.launch {
             withContext(Dispatchers.IO) {
+                AppLogger.i("Coroutine started...")
                 val result = useCase.getLocationFromLocalSource()
                 if (result.isNotEmpty()) {
                     _loading.postValue(false)
                     _currentFragment.postValue(MainFragment.newInstance())
                     _locations.postValue(LiveDataWrapper.success(result))
                 } else {
+                    AppLogger.i("LOCATION FROM LOCAL SOURCE IS EMPTY")
                     _currentFragment.postValue(LoadingFragment.newInstance())
                     _locations.postValue(LiveDataWrapper.dataShouldLoadRemotely())
                 }
@@ -77,8 +79,10 @@ class MainViewModel @Inject constructor(
     }
 
     fun handleLocationUpdates(lastKnownLocation: Location?) {
+        if (lastKnownLocation==null)
+            AppLogger.i("LAST-KNOWN-LOCATION IS NULL")
         _loading.value = true
-        ioScope.launch {
+        uiScope.launch {
             withContext(Dispatchers.IO) {
                 if (useCase.shouldRequestLocationUpdates(lastKnownLocation)) {
                     try {

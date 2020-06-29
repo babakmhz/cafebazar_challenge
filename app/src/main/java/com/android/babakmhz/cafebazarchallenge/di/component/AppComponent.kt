@@ -3,6 +3,8 @@ package com.android.babakmhz.cafebazarchallenge.di.component
 import com.android.babakmhz.cafebazarchallenge.di.module.ActivityModule
 import com.android.babakmhz.cafebazarchallenge.di.module.ApplicationModule
 import com.android.babakmhz.cafebazarchallenge.di.module.ViewModelBuilder
+import com.android.babakmhz.cafebazarchallenge.ui.MainActivity
+import com.android.babakmhz.cafebazarchallenge.ui.main.MainFragment
 import com.android.babakmhz.cafebazarchallenge.utils.MyApp
 import dagger.Component
 import dagger.android.AndroidInjector
@@ -20,4 +22,7 @@ import javax.inject.Singleton
 interface AppComponent : AndroidInjector<MyApp> {
     @Component.Builder
     abstract class Builder : AndroidInjector.Builder<MyApp>()
+
+    fun mainActivity(mainActivity:MainActivity)
+    fun mainFragment(mainFragment: MainFragment)
 }

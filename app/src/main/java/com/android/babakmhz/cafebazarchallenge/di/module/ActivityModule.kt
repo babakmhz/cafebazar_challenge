@@ -3,8 +3,11 @@ package com.android.babakmhz.cafebazarchallenge.di.module
 import androidx.lifecycle.ViewModel
 import com.android.babakmhz.cafebazarchallenge.di.Scope.PerActivity
 import com.android.babakmhz.cafebazarchallenge.di.qualifier.ActivityContext
-import com.android.babakmhz.cafebazarchallenge.ui.MainViewModel
 import com.android.babakmhz.cafebazarchallenge.ui.MainActivity
+import com.android.babakmhz.cafebazarchallenge.ui.MainViewModel
+import com.android.babakmhz.cafebazarchallenge.ui.main.DetailsFragment
+import com.android.babakmhz.cafebazarchallenge.ui.main.LoadingFragment
+import com.android.babakmhz.cafebazarchallenge.ui.main.MainFragment
 import com.android.babakmhz.cafebazarchallenge.utils.ViewModelKey
 import dagger.Binds
 import dagger.Module
@@ -34,4 +37,12 @@ internal abstract class ActivityModule {
     @ContributesAndroidInjector
     internal abstract fun mainActivity(): MainActivity
 
+    @ContributesAndroidInjector
+    internal abstract fun mainFragment(): MainFragment
+
+    @ContributesAndroidInjector
+    internal abstract fun loadingFragment(): LoadingFragment
+
+    @ContributesAndroidInjector
+    internal abstract fun detailsFragment(): DetailsFragment
 }

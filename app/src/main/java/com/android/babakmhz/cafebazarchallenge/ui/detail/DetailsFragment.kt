@@ -8,12 +8,17 @@ import androidx.lifecycle.ViewModelProvider
 import com.android.babakmhz.cafebazarchallenge.R
 import com.android.babakmhz.cafebazarchallenge.ui.MainViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import javax.inject.Inject
 
 class DetailsFragment : BottomSheetDialogFragment() {
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     companion object {
         fun newInstance() = DetailsFragment()
     }
+
+
 
     private lateinit var viewModel: MainViewModel
 

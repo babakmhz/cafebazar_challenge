@@ -5,14 +5,13 @@ import com.android.babakmhz.cafebazarchallenge.di.component.DaggerAppComponent
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 
-class MyApp : DaggerApplication() {
+class MyApp : DaggerApplication(){
 
     override fun onCreate() {
         super.onCreate()
         if (BuildConfig.DEBUG) {
             AppLogger.init()
         }
-        DaggerAppComponent.builder().build().inject(this)
     }
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {

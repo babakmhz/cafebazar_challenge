@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,15 +15,18 @@ import com.android.babakmhz.cafebazarchallenge.ui.MainViewModel
 import com.android.babakmhz.cafebazarchallenge.ui.detail.DetailsRecyclerViewAdapter
 import com.android.babakmhz.cafebazarchallenge.ui.detail.callBack
 import com.android.babakmhz.cafebazarchallenge.utils.LiveDataWrapper
+import dagger.android.AndroidInjection
+import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_list_locations.*
 import javax.inject.Inject
 
 //we could use base fragment to do binding jobs also
 
-class MainFragment : Fragment(), callBack {
+class MainFragment : DaggerFragment(), callBack {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+
 
     companion object {
         fun newInstance() = MainFragment()
@@ -33,12 +35,15 @@ class MainFragment : Fragment(), callBack {
     private lateinit var viewModel: MainViewModel
     private lateinit var fragmentMainBinding: FragmentListLocationsBinding
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         fragmentMainBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_list_locations, container, false)
+
+        AndroidInjection.inject(activity)
 
         viewModel = activity?.run {
             ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)

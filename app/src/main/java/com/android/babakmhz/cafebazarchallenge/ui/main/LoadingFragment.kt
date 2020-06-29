@@ -5,18 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.android.babakmhz.cafebazarchallenge.R
-import com.android.babakmhz.cafebazarchallenge.data.db.LocationModel
 import com.android.babakmhz.cafebazarchallenge.databinding.FragmentLoadingBinding
 import com.android.babakmhz.cafebazarchallenge.ui.MainViewModel
-import com.android.babakmhz.cafebazarchallenge.utils.LiveDataWrapper
+import dagger.android.AndroidInjection
+import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_loading.*
 import javax.inject.Inject
 
-class LoadingFragment : Fragment() {
+class LoadingFragment : DaggerFragment() {
+
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -32,20 +31,17 @@ class LoadingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         fragmentLoadingBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_list_locations, container, false)
+            DataBindingUtil.inflate(inflater, R.layout.fragment_loading, container, false)
 
+        AndroidInjection.inject(activity)
         viewModel = activity?.run {
             ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
         }!!
         fragmentLoadingBinding.viewModel = viewModel
+
         fragmentLoadingBinding.executePendingBindings()
 
-        bt_requestPermission.setOnClickListener {
-            viewModel.init()
-        }
         return fragmentLoadingBinding.root
 
     }
-
-
 }

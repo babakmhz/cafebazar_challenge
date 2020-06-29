@@ -2,11 +2,9 @@ package com.android.babakmhz.cafebazarchallenge.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationListener
 import android.os.Bundle
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
@@ -17,16 +15,22 @@ import com.android.babakmhz.cafebazarchallenge.R
 import com.android.babakmhz.cafebazarchallenge.data.db.LocationModel
 import com.android.babakmhz.cafebazarchallenge.databinding.MainActivityBinding
 import com.android.babakmhz.cafebazarchallenge.ui.main.DetailsFragment
-import com.android.babakmhz.cafebazarchallenge.ui.main.MainFragment
+import com.android.babakmhz.cafebazarchallenge.utils.AppLogger
 import com.android.babakmhz.cafebazarchallenge.utils.LOCATION_PERMISSION_CODE
 import com.android.babakmhz.cafebazarchallenge.utils.LiveDataWrapper
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.location.*
+import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
-class MainActivity : DaggerAppCompatActivity(),com.google.android.gms.location.LocationListener {
 
+class MainActivity : DaggerAppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
+    GoogleApiClient.OnConnectionFailedListener, LocationListener {
+
+
+    private lateinit var googleApiClient: GoogleApiClient
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -35,25 +39,31 @@ class MainActivity : DaggerAppCompatActivity(),com.google.android.gms.location.L
         ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
     }
 
+    private lateinit var locationCallback: LocationCallback
+
     private lateinit var locationClient: FusedLocationProviderClient
     private lateinit var activityBinding: MainActivityBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityBinding = DataBindingUtil.setContentView(this, R.layout.main_activity)
+
+        AndroidInjection.inject(this)
+
+        googleApiClient = GoogleApiClient.Builder(this).addApi(LocationServices.API)
+            .addConnectionCallbacks(this).addOnConnectionFailedListener(this).build()
+        googleApiClient.connect()
+
         activityBinding.viewModel = viewModel
         handleObservers()
+
         viewModel.setLoadingText(getString(R.string.loading_location))
         viewModel.init()
+
         activityBinding.executePendingBindings()
-        handleLocationPermission()
-
-        if (savedInstanceState == null) {
-            viewModel.setCurrentFragment(MainFragment.newInstance())
-        }
-
 
     }
+
 
     private fun handleObservers() {
         viewModel.currentFragment.observe(this, fragmentsObserver)
@@ -87,6 +97,8 @@ class MainActivity : DaggerAppCompatActivity(),com.google.android.gms.location.L
                 ).toTypedArray(), LOCATION_PERMISSION_CODE
             )
 
+        } else {
+            getLastKnownLocation()
         }
 
 
@@ -117,22 +129,53 @@ class MainActivity : DaggerAppCompatActivity(),com.google.android.gms.location.L
 
     @SuppressLint("MissingPermission")
     private fun getLastKnownLocation() {
-        locationClient = LocationServices.getFusedLocationProviderClient(this)
-        locationClient.lastLocation
-            .addOnSuccessListener { location: Location? ->
-                viewModel.handleLocationUpdates(location)
-            }
+        val locationRequest = LocationRequest()
+        locationRequest.interval = 60000;
+        locationRequest.fastestInterval = 60000;
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+            googleApiClient,
+            locationRequest,
+            this
+        );
 
     }
 
-    override fun onLocationChanged(p0: Location?) {
-        TODO("Not yet implemented")
+    override fun onPause() {
+        super.onPause();
+        if (googleApiClient.isConnected) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
+            googleApiClient.disconnect();
+        }
     }
 
-//    private fun requestLocationUpdates() {
-//        val locationManager = getSystemService(Context.LOCATION_SERVICE)
-//    }
 
+    override fun onResume() {
+        super.onResume();
+        if (googleApiClient.isConnected) {
+            googleApiClient.connect()
+        }
+    }
+
+
+    override fun onConnected(p0: Bundle?) {
+        AppLogger.i("GOOGLE API LOCATION CONNECTION CONNECTED")
+        handleLocationPermission()
+//        getLastKnownLocation()
+    }
+
+    override fun onConnectionSuspended(p0: Int) {
+
+        AppLogger.i("GOOGLE API LOCATION CONNECTION SUSPENDED")
+    }
+
+    override fun onConnectionFailed(p0: ConnectionResult) {
+        AppLogger.i("GOOGLE API LOCATION CONNECTION FAILED")
+    }
+
+    override fun onLocationChanged(location: Location?) {
+        AppLogger.i("LOCATION FOUND ${location!!.longitude},${location.latitude}")
+        viewModel.handleLocationUpdates(location)
+    }
 }
 
 
