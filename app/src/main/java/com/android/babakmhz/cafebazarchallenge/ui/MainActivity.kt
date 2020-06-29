@@ -125,9 +125,9 @@ class MainActivity : DaggerAppCompatActivity(),com.google.android.gms.location.L
 
     }
 
-//    override fun onLocationChanged(p0: Location?) {
-//        TODO("Not yet implemented")
-//    }
+    override fun onLocationChanged(p0: Location?) {
+        TODO("Not yet implemented")
+    }
 
 //    private fun requestLocationUpdates() {
 //        val locationManager = getSystemService(Context.LOCATION_SERVICE)
