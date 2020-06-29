@@ -31,7 +31,7 @@ internal abstract class ActivityModule {
     internal abstract fun provideMainViewModelFactory(mainViewModel: MainViewModel): ViewModel
 
 
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     internal abstract fun mainActivity(): MainActivity
 
 }

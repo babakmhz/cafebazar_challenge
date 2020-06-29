@@ -18,19 +18,18 @@ import javax.inject.Inject
 class MainActivity : DaggerAppCompatActivity() {
 
 
-//    @Inject
-//    lateinit var viewModelFactory: ViewModelProvider.Factory
-//
-//    private val viewModel: MainViewModel by lazy {
-//        ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
-//    }
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private val viewModel: MainViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+    }
 
     lateinit var locationClient: FusedLocationProviderClient
     lateinit var activityBinding: MainActivityBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityBinding = DataBindingUtil.setContentView(this, R.layout.main_activity)
-
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, MainFragment.newInstance())

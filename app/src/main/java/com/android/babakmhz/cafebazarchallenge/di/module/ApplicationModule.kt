@@ -3,9 +3,9 @@ package com.android.babakmhz.cafebazarchallenge.di.module
 import android.content.Context
 import androidx.room.Room
 import com.android.babakmhz.cafebazarchallenge.data.db.AppDatabase
+import com.android.babakmhz.cafebazarchallenge.data.db.LocationsDao
 import com.android.babakmhz.cafebazarchallenge.data.network.ApiService
 import com.android.babakmhz.cafebazarchallenge.data.prefs.AppPrefs
-import com.android.babakmhz.cafebazarchallenge.di.qualifier.ApplicationContext
 import com.android.babakmhz.cafebazarchallenge.ui.main.MainUseCase
 import com.android.babakmhz.cafebazarchallenge.utils.BASE_URL
 import com.android.babakmhz.cafebazarchallenge.utils.DB_NAME
@@ -28,11 +28,11 @@ internal abstract class ApplicationModule {
     @Module
     object AppModule {
         @Provides
-        @Singleton
-        @ApplicationContext
+        @JvmStatic
         fun provideAppContext(myApp: MyApp): Context = myApp.applicationContext
 
         @Provides
+        @JvmStatic
         @Singleton
         fun provideRetrofitClient(): Retrofit {
             val logging = HttpLoggingInterceptor()
@@ -50,19 +50,26 @@ internal abstract class ApplicationModule {
 
         }
 
-
         @Provides
+        @JvmStatic
         @Singleton
-        fun providesMainUseCase(db: AppDatabase, prefs: AppPrefs, apiService: ApiService) =
+        fun providesMainUseCase(
+            db: LocationsDao,
+            prefs: AppPrefs,
+            apiService: ApiService
+        ): MainUseCase =
             MainUseCase(db, prefs, apiService)
 
         @Provides
+        @JvmStatic
         @Singleton
-        fun provideAppDatabase(context: Context): AppDatabase = Room.databaseBuilder(
-            context,
-            AppDatabase::class.java,
-            DB_NAME
-        ).build()
-
+        fun provideAppDatabase(context: Context): LocationsDao {
+            val db = Room.databaseBuilder(
+                context,
+                AppDatabase::class.java,
+                DB_NAME
+            ).build()
+            return db.locationsDao()
+        }
     }
 }

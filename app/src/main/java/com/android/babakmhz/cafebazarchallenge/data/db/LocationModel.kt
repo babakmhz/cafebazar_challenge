@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
 data class LocationModel(
     @PrimaryKey val id: String,
     @ColumnInfo val name: String,
-    @Embedded val location: Location
+    @Embedded(prefix = "location_") val location: Location
 )
 
 

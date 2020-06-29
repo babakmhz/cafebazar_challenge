@@ -50,7 +50,7 @@ class TestMainUseCase {
     fun setUp() {
         MockitoAnnotations.initMocks(this)
         whenever(db.locationsDao()).thenReturn(locationsDao)
-        mainUseCase = MainUseCase(db, prefs, apiService)
+        mainUseCase = MainUseCase(locationsDao, prefs, apiService)
     }
 
     @Test
@@ -77,7 +77,6 @@ class TestMainUseCase {
             ).thenReturn(_response)
 
 
-            mainUseCase = MainUseCase(db, prefs, apiService)
 
             assertNull(mainUseCase.getLocationFromRemoteSource(lastKnownLocation))
         }

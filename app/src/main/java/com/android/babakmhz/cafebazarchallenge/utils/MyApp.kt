@@ -12,6 +12,7 @@ class MyApp : DaggerApplication() {
         if (BuildConfig.DEBUG) {
             AppLogger.init()
         }
+        DaggerAppComponent.builder().build().inject(this)
     }
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {

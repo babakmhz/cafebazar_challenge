@@ -13,11 +13,10 @@ import kotlinx.coroutines.*
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
-    private val useCase: MainUseCase,
-    ioDispatcher: CoroutineDispatcher
+    private val useCase: MainUseCase
 ) : ViewModel() {
 
-
+    private val ioDispatcher = Dispatchers.IO
     private val job = SupervisorJob()
     private val ioScope = CoroutineScope(ioDispatcher + job)
 

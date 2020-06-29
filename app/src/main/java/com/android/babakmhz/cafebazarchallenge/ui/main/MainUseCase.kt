@@ -1,27 +1,30 @@
 package com.android.babakmhz.cafebazarchallenge.ui.main
 
 import android.location.Location
-import com.android.babakmhz.cafebazarchallenge.data.db.AppDatabase
 import com.android.babakmhz.cafebazarchallenge.data.db.ConvertFormattedAddressToString
 import com.android.babakmhz.cafebazarchallenge.data.db.LocationModel
+import com.android.babakmhz.cafebazarchallenge.data.db.LocationsDao
 import com.android.babakmhz.cafebazarchallenge.data.network.ApiResponse
 import com.android.babakmhz.cafebazarchallenge.data.network.ApiService
 import com.android.babakmhz.cafebazarchallenge.data.prefs.AppPrefs
 import com.android.babakmhz.cafebazarchallenge.utils.*
 import com.google.android.gms.maps.model.LatLng
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class MainUseCase(
-    private val db: AppDatabase, private val prefs: AppPrefs,
+@Singleton
+class MainUseCase @Inject constructor(
+    private val db: LocationsDao, private val prefs: AppPrefs,
     private val apiService: ApiService
 ) {
 
     suspend fun saveLocations(locations: List<LocationModel>) {
-        db.locationsDao().clearLocationTable()
-        db.locationsDao().insertLocations(locations)
+        db.clearLocationTable()
+        db.insertLocations(locations)
     }
 
     suspend fun getLocationFromLocalSource(): List<LocationModel> {
-        return db.locationsDao().getAllLocations()
+        return db.getAllLocations()
     }
 
     suspend fun getLocationFromRemoteSource(location: Location): List<LocationModel>? {
@@ -70,7 +73,7 @@ class MainUseCase(
 
         if (prefs.getLastKnownLocation().equals("") || prefs.getNotFirstTimeAppOpened()) return true
 
-        if (db.locationsDao().getAllLocations().isEmpty()) return true
+        if (db.getAllLocations().isEmpty()) return true
 
         try {
             val oldLocation = AppUtils.getLatLngFromString(prefs.getLastKnownLocation())
