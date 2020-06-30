@@ -18,7 +18,7 @@ data class Response(
     @SerializedName("headerLocation") val headerLocation: String,
     @SerializedName("headerFullLocation") val headerFullLocation: String,
     @SerializedName("headerLocationGranularity") val headerLocationGranularity: String
-    , @SerializedName("groups") val groups: Groups
+    , @SerializedName("groups") val groups: List<Groups>
 )
 
 data class Groups(

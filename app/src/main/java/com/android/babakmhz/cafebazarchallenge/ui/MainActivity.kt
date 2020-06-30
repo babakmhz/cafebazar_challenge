@@ -176,7 +176,7 @@ class MainActivity : DaggerAppCompatActivity(), GoogleApiClient.ConnectionCallba
     }
 
     override fun onLocationChanged(location: Location?) {
-        AppLogger.i("LOCATION FOUND ${location!!.longitude},${location.latitude}")
+        AppLogger.i("LOCATION FOUND ${location!!.latitude},${location.longitude}")
         viewModel.handleLocationUpdates(location)
     }
 }

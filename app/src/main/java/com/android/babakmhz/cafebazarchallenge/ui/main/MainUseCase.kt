@@ -48,7 +48,7 @@ class MainUseCase @Inject constructor(
     }
 
     private fun resolveApiObjectToDbModel(apiResponse: ApiResponse): List<LocationModel> {
-        val items = apiResponse.response.groups.items
+        val items = apiResponse.response.groups[0].items
         val locations = arrayListOf<LocationModel>()
         for (item in items) {
             val venue = item.reasons.venue
@@ -87,7 +87,7 @@ class MainUseCase @Inject constructor(
             )
                 return true
         } catch (ex: Exception) {
-            AppLogger.e(ex, "Exception Happened")
+            AppLogger.e(ex, "Exception Happened IN LOCATION SHOULD UPDATE")
             return true
         }
 
