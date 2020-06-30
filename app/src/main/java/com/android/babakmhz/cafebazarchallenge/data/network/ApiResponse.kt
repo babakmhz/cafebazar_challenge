@@ -1,6 +1,5 @@
 package com.android.babakmhz.cafebazarchallenge.data.network
 
-import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
 
 data class ApiResponse(
@@ -26,27 +25,25 @@ data class Groups(
     @SerializedName("items") val items: List<Items>
 )
 
-data class Items(@SerializedName("reasons") val reasons: Reasons)
 
-data class Reasons(@SerializedName("venue") val venue: Venue)
+data class Items(@SerializedName("venue") val venue: Venue)
 
 data class Venue(
     @SerializedName("id") val id: String,
-    @SerializedName("name") val name: String, @SerializedName("location") val location: Location
+    @SerializedName("name") val name: String,
+    @SerializedName("location") val location: Location,
+    @SerializedName("categories") val categories: List<Category>
 )
 
 data class Location(
     @SerializedName("address") val address: String,
-    @SerializedName("crossStreet") val crossStreet: String,
     @SerializedName("lat") val lat: String,
     @SerializedName("lng") val lng: String,
     @SerializedName("distance") val distance: Int,
-    @SerializedName("postalCode") val postalCode: String,
     @SerializedName("cc") val cc: String,
     @SerializedName("city") val city: String,
     @SerializedName("country") val country: String,
-    @SerializedName("formattedAddress") val formattedAddress: List<String>,
-    @SerializedName("categories") val categories: List<Category>
+    @SerializedName("formattedAddress") val formattedAddress: List<String>
 )
 
 data class Category(

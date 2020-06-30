@@ -51,21 +51,28 @@ class MainUseCase @Inject constructor(
         val items = apiResponse.response.groups[0].items
         val locations = arrayListOf<LocationModel>()
         for (item in items) {
-            val venue = item.reasons.venue
-            val icon = venue.location.categories[0].icon
-            val iconUrl = "${icon.prefix}${icon.suffix}"
-            val _location = com.android.babakmhz.cafebazarchallenge.data.db.Location(
-                venue.id,
-                venue.location.address,
-                venue.location.lat,
-                venue.location.lng,
-                venue.location.distance,
-                venue.location.city,
-                venue.location.country,
-                iconUrl,
-                ConvertFormattedAddressToString.convert(venue.location.formattedAddress)
-            )
-            locations.add(LocationModel(venue.id, venue.name, _location))
+            try {
+
+                val venue = item.venue
+                val icon = venue.categories[0].icon
+                val iconUrl = "${icon.prefix}${icon.suffix}"
+                val _location = com.android.babakmhz.cafebazarchallenge.data.db.Location(
+                    venue.id,
+                    venue.location.address,
+                    venue.location.lat,
+                    venue.location.lng,
+                    venue.location.distance,
+                    venue.location.city,
+                    venue.location.country,
+                    iconUrl,
+                    ConvertFormattedAddressToString.convert(venue.location.formattedAddress),
+                    venue.categories[0].name
+                )
+                locations.add(LocationModel(venue.id, venue.name, _location))
+            } catch (ex: Exception) {
+                AppLogger.i("EXCEPTION HAPPENED IN PARSING RESULT : \n ${ex.toString()}")
+                AppLogger.i("Locations In List SIZE ${locations.size}")
+            }
         }
         return locations
     }
