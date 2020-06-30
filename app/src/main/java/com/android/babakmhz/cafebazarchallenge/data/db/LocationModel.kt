@@ -16,14 +16,15 @@ data class LocationModel(
 @Entity(tableName = "Place")
 data class Location(
     @PrimaryKey val locationId: String,
-    @ColumnInfo val address: String,
+    @ColumnInfo val address: String?,
     @ColumnInfo val lat: String,
     @ColumnInfo val lng: String,
     @ColumnInfo val distance: Int,
-    @ColumnInfo val city: String,
+    @ColumnInfo val city: String?,
     @ColumnInfo val country: String,
     @ColumnInfo val icon: String,
-    @ColumnInfo val formattedAddress: String
+    @ColumnInfo val formattedAddress: String,
+    @ColumnInfo val category: String
 )
 
 object ConvertFormattedAddressToString {
