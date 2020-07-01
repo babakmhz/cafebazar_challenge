@@ -56,8 +56,8 @@ class DetailsRecyclerViewAdapter(
             @BindingAdapter("imageUrl")
             @JvmStatic
             fun loadImage(view: CircleImageView, url: String?) {
-                Glide.with(view).load(url)
-                    .placeholder(R.drawable.location_preview).into(view)
+//                Glide.with(view).load(url)
+//                    .placeholder(R.drawable.location_preview).into(view)
             }
         }
 

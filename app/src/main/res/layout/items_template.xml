@@ -43,7 +43,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:src="@drawable/location_preview" />
+                    android:src="@drawable/location_preview" />
 
                 <TextView
                     android:id="@+id/item_title"
