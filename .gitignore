@@ -84,3 +84,5 @@ lint/outputs/
 lint/tmp/
 # lint/reports/
 notes.txt
+keystore.kjs
+keystore.jks
