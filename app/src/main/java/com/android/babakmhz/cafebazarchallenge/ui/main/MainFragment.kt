@@ -14,8 +14,6 @@ import com.android.babakmhz.cafebazarchallenge.data.db.LocationModel
 import com.android.babakmhz.cafebazarchallenge.databinding.FragmentListLocationsBinding
 import com.android.babakmhz.cafebazarchallenge.ui.MainViewModel
 import com.android.babakmhz.cafebazarchallenge.ui.detail.DetailsFragment
-import com.android.babakmhz.cafebazarchallenge.ui.detail.DetailsRecyclerViewAdapter
-import com.android.babakmhz.cafebazarchallenge.ui.detail.callBack
 import com.android.babakmhz.cafebazarchallenge.utils.AppLogger
 import com.android.babakmhz.cafebazarchallenge.utils.LiveDataWrapper
 import dagger.android.AndroidInjection
@@ -25,7 +23,8 @@ import javax.inject.Inject
 
 //we could use base fragment to do binding jobs also
 
-class MainFragment : DaggerFragment(), callBack {
+class MainFragment : DaggerFragment(),
+    callBack {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -39,7 +38,11 @@ class MainFragment : DaggerFragment(), callBack {
     private lateinit var fragmentMainBinding: FragmentListLocationsBinding
 
     private val detailsRecyclerViewAdapter: DetailsRecyclerViewAdapter by lazy {
-        DetailsRecyclerViewAdapter(this@MainFragment.context!!, emptyList(), this)
+        DetailsRecyclerViewAdapter(
+            this@MainFragment.context!!,
+            emptyList(),
+            this
+        )
     }
 
 

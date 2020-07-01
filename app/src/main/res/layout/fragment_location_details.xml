@@ -13,25 +13,23 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/rounded_view"
-        android:padding="@dimen/standard_margin">
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="8dp">
+
+        <ImageView
+            android:id="@+id/image_location"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/location_preview"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/image_location"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:adjustViewBounds="true"
-                android:scaleType="fitXY"
-                android:src="@drawable/location_preview"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="match_parent">
 
 
             <View
@@ -40,20 +38,20 @@
                 android:layout_centerInParent="true"
                 android:alpha="0.6"
                 android:background="@drawable/selector_view_darker"
-                app:layout_constraintBottom_toBottomOf="@id/image_location"
-                app:layout_constraintEnd_toEndOf="@id/image_location"
-                app:layout_constraintStart_toStartOf="@id/image_location"
-                app:layout_constraintTop_toTopOf="@id/image_location" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
             <TextView
                 android:id="@+id/text_county"
                 android:layout_width="wrap_content"
-                android:textAlignment="viewStart"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/standard_margin"
                 android:layout_marginTop="@dimen/standard_margin"
                 android:text="country :"
+                android:textAlignment="viewStart"
                 android:textColor="#fff"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -69,8 +67,8 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="@{viewModel.selectedLocation.location.country}"
-                android:textColor="#fff"
                 android:textAlignment="viewStart"
+                android:textColor="#fff"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/text_county"
@@ -83,8 +81,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/standard_margin"
                 android:layout_marginTop="@dimen/standard_margin"
-                android:textAlignment="viewStart"
                 android:text="city :"
+                android:textAlignment="viewStart"
                 android:textColor="#fff"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -95,11 +93,11 @@
                 android:id="@+id/text_city_value"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textAlignment="viewStart"
                 android:layout_marginStart="@dimen/standard_margin"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="@{viewModel.selectedLocation.location.city}"
+                android:textAlignment="viewStart"
                 android:textColor="#fff"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@id/text_city"
@@ -116,9 +114,9 @@
                 android:layout_marginStart="@dimen/standard_margin"
                 android:layout_marginTop="@dimen/standard_margin"
                 android:text="address:"
+                android:textAlignment="viewStart"
                 android:textColor="#fff"
                 android:textSize="18sp"
-                android:textAlignment="viewStart"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_city" />
@@ -128,19 +126,29 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/standard_margin"
+                android:layout_marginEnd="@dimen/standard_margin"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="@{viewModel.selectedLocation.location.formattedAddress}"
+                android:textAlignment="viewStart"
                 android:textColor="#fff"
-                android:layout_marginEnd="@dimen/standard_margin"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@id/text_address"
-                android:textAlignment="viewStart"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/text_address"
                 app:layout_constraintTop_toTopOf="@id/text_address"
                 tools:text="iran" />
 
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="open address on map"
+                app:icon="@drawable/ic_baseline_map_24"
+                android:id="@+id/bt_map"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_address_value" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </FrameLayout>

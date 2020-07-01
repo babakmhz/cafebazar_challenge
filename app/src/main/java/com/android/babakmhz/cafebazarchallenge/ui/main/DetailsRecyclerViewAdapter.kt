@@ -1,4 +1,4 @@
-package com.android.babakmhz.cafebazarchallenge.ui.detail
+package com.android.babakmhz.cafebazarchallenge.ui.main
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -22,7 +22,12 @@ class DetailsRecyclerViewAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): viewHolder {
         val templateBinding =
             ItemsTemplateBinding.inflate(LayoutInflater.from(context), parent, false)
-        return viewHolder(context, templateBinding, templateBinding.root, callback)
+        return viewHolder(
+            context,
+            templateBinding,
+            templateBinding.root,
+            callback
+        )
     }
 
     override fun getItemCount(): Int {

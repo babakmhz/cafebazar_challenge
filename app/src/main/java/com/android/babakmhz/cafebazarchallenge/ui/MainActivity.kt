@@ -2,8 +2,11 @@ package com.android.babakmhz.cafebazarchallenge.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Dialog
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -17,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.android.babakmhz.cafebazarchallenge.R
 import com.android.babakmhz.cafebazarchallenge.data.db.LocationModel
 import com.android.babakmhz.cafebazarchallenge.databinding.MainActivityBinding
+import com.android.babakmhz.cafebazarchallenge.ui.detail.DetailsFragment
 import com.android.babakmhz.cafebazarchallenge.ui.main.MainFragment
 import com.android.babakmhz.cafebazarchallenge.utils.AppLogger
 import com.android.babakmhz.cafebazarchallenge.utils.LOCATION_PERMISSION_CODE
@@ -27,6 +31,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationListener
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
@@ -36,6 +41,9 @@ import javax.inject.Inject
 //as i noticed java programming language as your one of your preferred technologies(RxJava,MVP,etc)
 //please check this repo for my java clean MVP project
 // https://github.com/babakmhz/homefit_android
+
+
+// note: i could have write more tests for this project but i was running outta time
 
 class MainActivity : DaggerAppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
     GoogleApiClient.OnConnectionFailedListener, LocationListener {
@@ -87,10 +95,39 @@ class MainActivity : DaggerAppCompatActivity(), GoogleApiClient.ConnectionCallba
 
     private val fragmentsObserver = Observer<Fragment> {
         if (it != null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.container, it)
-                .commitNow()
+            if (it !is DetailsFragment) {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.container, it)
+                    .commitNow()
+            } else {
+                showDetailsDialog()
+            }
         }
+    }
+
+    private fun showDetailsDialog() {
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.fragment_location_details)
+        dialog.findViewById<TextView>(R.id.text_address_value).text =
+            viewModel.selectedLocation.value?.location?.formattedAddress
+        dialog.findViewById<TextView>(R.id.text_city_value).text =
+            viewModel.selectedLocation.value?.location?.city
+        dialog.findViewById<TextView>(R.id.text_county_value).text =
+            viewModel.selectedLocation.value?.location?.country
+        dialog.findViewById<MaterialButton>(R.id.bt_map).setOnClickListener {
+            try {
+                val intent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse(
+                        "https://www.google.com/maps/search/?api=1&query=${viewModel.selectedLocation.value?.location?.lat},${viewModel.selectedLocation.value?.location?.lng}"
+                    )
+                );
+                startActivity(intent);
+            } catch (e: Exception) {
+                e.printStackTrace();
+            }
+        }
+        dialog.show()
     }
 
     private fun checkIfAppHasPermissions(): Boolean {
@@ -144,6 +181,7 @@ class MainActivity : DaggerAppCompatActivity(), GoogleApiClient.ConnectionCallba
         if (it) {
             handleLocationPermission()
         }
+
     }
 
     private val locationsObserver = Observer<LiveDataWrapper<List<LocationModel>>> {

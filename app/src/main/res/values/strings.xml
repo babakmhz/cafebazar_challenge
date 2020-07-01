@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">CafebazarChallenge</string>
     <string name="loading_location">Please wait while determining your location...</string>
-    <string name="accept_permission">Due to access your location for app to work we need your permission\nPlease accept permission for app to work</string>
+    <string name="accept_permission">Due to access your location for app to work we need your permission</string>
     <string name="error">Failed to load data!</string>
     <string name="determining_your_location">determining your location...</string>
     <string name="press_back_again">Press back again to exit</string>
