@@ -8,7 +8,7 @@ import androidx.room.Query
 @Dao
 interface LocationsDao {
 
-    @Query("SELECT * from Locations")
+    @Query("SELECT * from Locations order by location_distance ASC")
     suspend fun getAllLocations(): List<LocationModel>
 
     @Query("DELETE FROM Locations")

@@ -21,17 +21,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-
             <ImageView
                 android:id="@+id/image_location"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
+                android:src="@drawable/location_preview"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/location_preview" />
+                app:layout_constraintTop_toTopOf="parent" />
 
 
             <View
@@ -65,6 +64,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/standard_margin"
                 android:layout_marginTop="@dimen/standard_margin"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:text="@{viewModel.selectedLocation.location.country}"
                 android:textColor="#fff"
                 android:textSize="18sp"
@@ -90,6 +91,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/standard_margin"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:text="@{viewModel.selectedLocation.location.city}"
                 android:textColor="#fff"
                 android:textSize="18sp"
@@ -117,38 +120,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/standard_margin"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:text="@{viewModel.selectedLocation.location.formattedAddress}"
                 android:textColor="#fff"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@id/text_address"
                 app:layout_constraintStart_toEndOf="@id/text_address"
                 app:layout_constraintTop_toTopOf="@id/text_address"
-                tools:text="iran" />
-
-            <TextView
-                android:id="@+id/text_distance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/standard_margin"
-                android:layout_marginTop="@dimen/standard_margin"
-                android:text="distance:"
-                android:textColor="#fff"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/text_address" />
-
-            <TextView
-                android:id="@+id/text_distance_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/standard_margin"
-                android:text="@{viewModel.selectedLocation.location.distance}"
-                android:textColor="#fff"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="@id/text_distance"
-                app:layout_constraintStart_toEndOf="@id/text_distance"
-                app:layout_constraintTop_toTopOf="@id/text_distance"
                 tools:text="iran" />
 
 

@@ -22,6 +22,7 @@ class MainViewModel @Inject constructor(
     private val job = SupervisorJob()
     private val uiScope = CoroutineScope(ioDispatcher + job)
 
+
     private var _locationPermission = MutableLiveData<Boolean>()
     val locationPermission: LiveData<Boolean> get() = _locationPermission
 
@@ -32,16 +33,24 @@ class MainViewModel @Inject constructor(
     val locations: LiveData<LiveDataWrapper<List<LocationModel>>> = _locations
 
     private var _myLocation = MutableLiveData<String>()
-    val myLocation: LiveData<String> get() = _myLocation
+    val myLocation: LiveData<String> = _myLocation
 
     private var _loadingText = MutableLiveData<String>()
-    val loadingText: LiveData<String> get() = _loadingText
+    val loadingText: LiveData<String> = _loadingText
+
+    private var _error = MutableLiveData<Boolean>()
+    val error: LiveData<Boolean> = _error
 
     private var _currentFragment = MutableLiveData<Fragment>()
     val currentFragment: LiveData<Fragment> = _currentFragment
 
     private var _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
+
+
+    fun requestLocationPermission() {
+        _locationPermission.value = true
+    }
 
     fun setCurrentFragment(fragment: Fragment) {
         _currentFragment.value = fragment
@@ -59,29 +68,43 @@ class MainViewModel @Inject constructor(
         _loadingText.value = loadingText
     }
 
+    fun setLoading(loading: Boolean) {
+        _loading.value = loading
+    }
+
+
+    init {
+        _locationPermission.value = false
+        _loading.value = false
+        _error.value = false
+    }
+
     fun init() {
-        _loading.value = true
         uiScope.launch {
             withContext(Dispatchers.IO) {
-                AppLogger.i("Coroutine started...")
                 val result = useCase.getLocationFromLocalSource()
                 if (result.isNotEmpty()) {
                     _loading.postValue(false)
                     _currentFragment.postValue(MainFragment.newInstance())
                     _locations.postValue(LiveDataWrapper.success(result))
+                    _myLocation.postValue(useCase.getLastLatLng())
                 } else {
                     AppLogger.i("LOCATION FROM LOCAL SOURCE IS EMPTY")
-                    _currentFragment.postValue(LoadingFragment.newInstance())
+                    if (_currentFragment.value !is LoadingFragment)
+                        _currentFragment.postValue(LoadingFragment.newInstance())
+
                     _locations.postValue(LiveDataWrapper.dataShouldLoadRemotely())
                 }
             }
         }
     }
 
+
     fun handleLocationUpdates(lastKnownLocation: Location?) {
-        if (lastKnownLocation==null)
-            AppLogger.i("LAST-KNOWN-LOCATION IS NULL")
+
         _loading.value = true
+        _error.value = false
+
         uiScope.launch {
             withContext(Dispatchers.IO) {
                 if (useCase.shouldRequestLocationUpdates(lastKnownLocation)) {
@@ -89,15 +112,23 @@ class MainViewModel @Inject constructor(
                         val response = useCase.getLocationFromRemoteSource(lastKnownLocation)
                         _locations.postValue(LiveDataWrapper.success(response!!))
                         useCase.saveLocations(response)
-                        _loading.postValue(false)
+
+                        if (_currentFragment.value !is MainFragment)
+                            _currentFragment.postValue(MainFragment.newInstance())
+
+                        _myLocation.postValue("${lastKnownLocation?.latitude},${lastKnownLocation?.longitude}")
                     } catch (ex: Exception) {
                         AppLogger.e(ex, "Exception Happened")
+                        _error.postValue(true)
                         _locations.postValue(LiveDataWrapper.error(ex))
-                        _loading.postValue(false)
                     }
 
                 }
+
+                _loading.postValue(false)
+
             }
         }
     }
+
 }

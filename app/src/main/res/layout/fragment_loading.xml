@@ -35,20 +35,33 @@
             tools:text="@string/loading_location" />
 
         <ProgressBar
+            android:id="@+id/progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/standard_margin"
+            android:visibility="@{viewModel.locationPermission?View.VISIBLE: View.GONE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_loading" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_tryAgain"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/standard_margin"
-            android:text="request permissions"
-            android:visibility="@{viewModel.locationPermission?View.VISIBLE : View.GONE}"
+            android:text="Try Again"
+            android:visibility="@{viewModel.error? View.GONE : View.VISIBLE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_loading" />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/bt_requestPermission"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/standard_margin"
+            android:text="Go ahead"
+            android:visibility="@{viewModel.locationPermission?View.GONE : View.VISIBLE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_loading" />

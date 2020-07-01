@@ -5,7 +5,7 @@ import com.android.babakmhz.cafebazarchallenge.di.Scope.PerActivity
 import com.android.babakmhz.cafebazarchallenge.di.qualifier.ActivityContext
 import com.android.babakmhz.cafebazarchallenge.ui.MainActivity
 import com.android.babakmhz.cafebazarchallenge.ui.MainViewModel
-import com.android.babakmhz.cafebazarchallenge.ui.main.DetailsFragment
+import com.android.babakmhz.cafebazarchallenge.ui.detail.DetailsFragment
 import com.android.babakmhz.cafebazarchallenge.ui.main.LoadingFragment
 import com.android.babakmhz.cafebazarchallenge.ui.main.MainFragment
 import com.android.babakmhz.cafebazarchallenge.utils.ViewModelKey

@@ -43,6 +43,7 @@ class MainUseCase @Inject constructor(
             return null
         }
 
+        prefs.setLastKnownLocation("${location.latitude},${location.longitude}")
         return resolveApiObjectToDbModel(apiResult)
 
     }
@@ -52,7 +53,6 @@ class MainUseCase @Inject constructor(
         val locations = arrayListOf<LocationModel>()
         for (item in items) {
             try {
-
                 val venue = item.venue
                 val icon = venue.categories[0].icon
                 val iconUrl = "${icon.prefix}${icon.suffix}"
@@ -70,11 +70,15 @@ class MainUseCase @Inject constructor(
                 )
                 locations.add(LocationModel(venue.id, venue.name, _location))
             } catch (ex: Exception) {
-                AppLogger.i("EXCEPTION HAPPENED IN PARSING RESULT : \n ${ex.toString()}")
+                AppLogger.i("EXCEPTION HAPPENED IN PARSING RESULT : $ex")
                 AppLogger.i("Locations In List SIZE ${locations.size}")
             }
         }
-        return locations
+        return locations.sortedBy { it.location.distance }
+    }
+
+    suspend fun getLastLatLng(): String? {
+        return prefs.getLastKnownLocation()
     }
 
     suspend fun shouldRequestLocationUpdates(lastKnownLocation: Location?): Boolean {

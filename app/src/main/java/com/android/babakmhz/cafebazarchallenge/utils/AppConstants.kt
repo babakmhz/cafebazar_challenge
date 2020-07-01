@@ -2,7 +2,7 @@ package com.android.babakmhz.cafebazarchallenge.utils
 
 
 const val BASE_URL = "https://api.foursquare.com/v2/"
-const val TIME_OUT: Long = 120
+const val TIME_OUT: Long = 30
 
 // we can define sensitive keys in more secure way via Android NDK, i'll do it in case of extra time
 const val CLIENT_ID = "XB03ZRTF1IFME4GSGUTCO1QKWLCMT2H1HVMAYLXNVRHKVHX0"

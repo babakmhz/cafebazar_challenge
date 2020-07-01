@@ -12,8 +12,10 @@ import com.android.babakmhz.cafebazarchallenge.R
 import com.android.babakmhz.cafebazarchallenge.data.db.LocationModel
 import com.android.babakmhz.cafebazarchallenge.databinding.FragmentListLocationsBinding
 import com.android.babakmhz.cafebazarchallenge.ui.MainViewModel
+import com.android.babakmhz.cafebazarchallenge.ui.detail.DetailsFragment
 import com.android.babakmhz.cafebazarchallenge.ui.detail.DetailsRecyclerViewAdapter
 import com.android.babakmhz.cafebazarchallenge.ui.detail.callBack
+import com.android.babakmhz.cafebazarchallenge.utils.AppLogger
 import com.android.babakmhz.cafebazarchallenge.utils.LiveDataWrapper
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerFragment
@@ -51,6 +53,9 @@ class MainFragment : DaggerFragment(), callBack {
 
         fragmentMainBinding.viewModel = viewModel
         viewModel.locations.observe(viewLifecycleOwner, locationsObserver)
+        viewModel.loading.observe(viewLifecycleOwner, loadingObserver)
+        viewModel.myLocation.observe(viewLifecycleOwner, userLocationObserver)
+
 
         return fragmentMainBinding.root
 
@@ -65,6 +70,24 @@ class MainFragment : DaggerFragment(), callBack {
             recycler_items.adapter = DetailsRecyclerViewAdapter(context!!, it.response, this)
         }
     }
+
+    private val userLocationObserver = Observer<String> {
+        text_latlng.text = String.format("your location coordinates: %s", it)
+        AppLogger.i("CHANGING ADDRESS TEXT TO : $it")
+    }
+
+    private val loadingObserver = Observer<Boolean> {
+        AppLogger.i("LOADING PROGRESS IN MAIN FRAGMENT IS $it")
+        if (it) {
+            progress.visibility = View.VISIBLE
+            text_latlng.text = getString(R.string.determining_your_location)
+        } else {
+            progress.visibility = View.GONE
+            text_latlng.text = viewModel.myLocation.value
+        }
+
+    }
+
 
     override fun onItemClicked(location: LocationModel) {
         viewModel.setSelectedLocation(location)

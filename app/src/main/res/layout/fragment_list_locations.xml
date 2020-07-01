@@ -2,6 +2,7 @@
 <layout>
 
     <data>
+
         <import type="android.view.View" />
 
         <variable
@@ -35,19 +36,19 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:id="@+id/text_latlng"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="@dimen/mid_margin"
                 android:layout_weight="1"
                 android:text="@{viewModel.myLocation}"
-                tools:text="determining your location..." />
+                tools:text="@string/determining_your_location" />
 
             <ProgressBar
+                android:id="@+id/progress"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="end|center_vertical"
-                android:layout_marginEnd="@dimen/standard_margin"
-                android:visibility="@{viewModel.loading? View.GONE : View.VISIBLE}" />
-
+                android:layout_marginEnd="@dimen/standard_margin" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
