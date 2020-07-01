@@ -19,6 +19,7 @@ import com.android.babakmhz.cafebazarchallenge.utils.LiveDataWrapper
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_list_locations.*
+import java.util.*
 import javax.inject.Inject
 
 //we could use base fragment to do binding jobs also
@@ -29,6 +30,7 @@ class MainFragment : DaggerFragment(),
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
+    private var recyclerviewPosition = 0
 
     companion object {
         fun newInstance() = MainFragment()
@@ -40,7 +42,7 @@ class MainFragment : DaggerFragment(),
     private val detailsRecyclerViewAdapter: DetailsRecyclerViewAdapter by lazy {
         DetailsRecyclerViewAdapter(
             this@MainFragment.context!!,
-            emptyList(),
+            ArrayList<LocationModel>(),
             this
         )
     }
@@ -79,7 +81,9 @@ class MainFragment : DaggerFragment(),
                 val pastVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
                 val total = recyclerView.adapter?.itemCount
                 if (visibleItemCount + pastVisibleItem >= total!!) {
-                    viewModel.getLocationsFromRemoteSource(true)
+                    recyclerviewPosition = dx
+                    if (!viewModel.isRecyclerViewUpdating.value!!)
+                        viewModel.getLocationsFromRemoteSource(null, true)
                 }
                 super.onScrolled(recyclerView, dx, dy)
             }
@@ -88,12 +92,18 @@ class MainFragment : DaggerFragment(),
 
     private val locationsObserver = Observer<LiveDataWrapper<List<LocationModel>>> {
         if (it.response != null) {
-            recycler_items.layoutManager = LinearLayoutManager(
-                context, LinearLayoutManager.VERTICAL,
-                false
-            )
+
+            if (recycler_items.layoutManager == null)
+                recycler_items.layoutManager = LinearLayoutManager(
+                    context, LinearLayoutManager.VERTICAL,
+                    false
+                )
+
             detailsRecyclerViewAdapter.addItems(it.response)
-            recycler_items.adapter = detailsRecyclerViewAdapter
+
+            if (recycler_items.adapter == null)
+                recycler_items.adapter = detailsRecyclerViewAdapter
+
         }
     }
 

@@ -36,9 +36,11 @@ class MainUseCase @Inject constructor(
         offset: Int = 1
     ): List<LocationModel>? {
 
-        var latLng: LatLng
+        if (location == null)
+            if (prefs.getLastKnownLocation().equals(""))
+                return null
 
-        latLng = if (location == null) {
+        val latLng: LatLng = if (location == null) {
             AppUtils.getLatLngFromString(prefs.getLastKnownLocation())!!
         } else {
             LatLng(location.latitude, location.longitude)
@@ -90,7 +92,7 @@ class MainUseCase @Inject constructor(
         return locations.sortedBy { it.location.distance }
     }
 
-    suspend fun getLastLatLng(): String? {
+    fun getLastLatLng(): String? {
         return prefs.getLastKnownLocation()
     }
 

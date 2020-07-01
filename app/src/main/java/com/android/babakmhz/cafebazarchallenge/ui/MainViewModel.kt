@@ -84,9 +84,6 @@ class MainViewModel @Inject constructor(
         _isRecyclerViewUpdating.value = false
     }
 
-    fun handleRecyclerScroll(){
-
-    }
 
     fun init() {
         uiScope.launch {
@@ -108,9 +105,9 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun getLocationsFromRemoteSource(nextPage: Boolean = false) {
+    fun getLocationsFromRemoteSource(lastKnownLocation: Location?, nextPage: Boolean = false) {
 
-        if (nextPage){
+        if (nextPage) {
             recyclerOffset += 1
             _isRecyclerViewUpdating.value = true
         }
@@ -118,7 +115,9 @@ class MainViewModel @Inject constructor(
         uiScope.launch {
             withContext(Dispatchers.IO) {
                 try {
-                    val response = useCase.getLocationFromRemoteSource(null, recyclerOffset)
+                    AppLogger.i("RECYCLER OFFSET IS $recyclerOffset")
+                    val response =
+                        useCase.getLocationFromRemoteSource(lastKnownLocation, recyclerOffset)
                     _locations.postValue(LiveDataWrapper.success(response!!))
 
                     if (recyclerOffset == 1)
@@ -134,6 +133,7 @@ class MainViewModel @Inject constructor(
                     _error.postValue(true)
                     _locations.postValue(LiveDataWrapper.error(ex))
                 }
+                _loading.postValue(false)
             }
             _isRecyclerViewUpdating.postValue(false)
         }
@@ -147,7 +147,7 @@ class MainViewModel @Inject constructor(
         uiScope.launch {
             if (useCase.shouldRequestLocationUpdates(lastKnownLocation)) {
                 recyclerOffset = 1
-                getLocationsFromRemoteSource()
+                getLocationsFromRemoteSource(lastKnownLocation)
             }
         }
 

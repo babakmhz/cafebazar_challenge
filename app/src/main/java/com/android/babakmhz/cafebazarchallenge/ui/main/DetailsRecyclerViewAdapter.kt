@@ -11,11 +11,12 @@ import com.android.babakmhz.cafebazarchallenge.data.db.LocationModel
 import com.android.babakmhz.cafebazarchallenge.databinding.ItemsTemplateBinding
 import com.bumptech.glide.Glide
 import de.hdodenhof.circleimageview.CircleImageView
+import java.util.*
 
 
 class DetailsRecyclerViewAdapter(
     private val context: Context,
-    private var locations: List<LocationModel>,
+    private var locations: ArrayList<LocationModel>,
     private val callback: callBack
 ) : RecyclerView.Adapter<DetailsRecyclerViewAdapter.viewHolder>() {
 
@@ -35,7 +36,7 @@ class DetailsRecyclerViewAdapter(
     }
 
     fun addItems(items: List<LocationModel>) {
-        locations += items
+        locations.addAll(items)
         locations.sortedBy { it.location.distance }
         notifyDataSetChanged()
     }

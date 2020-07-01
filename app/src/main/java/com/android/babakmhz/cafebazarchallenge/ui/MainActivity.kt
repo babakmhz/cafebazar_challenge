@@ -198,6 +198,9 @@ class MainActivity : DaggerAppCompatActivity(), GoogleApiClient.ConnectionCallba
     private fun requestLocationUpdates() {
         val locationRequest = LocationRequest()
         locationRequest.smallestDisplacement = 100F
+        locationRequest.interval = 100000
+        locationRequest.fastestInterval = 50000
+
         LocationServices.FusedLocationApi.requestLocationUpdates(
             googleApiClient,
             locationRequest,
