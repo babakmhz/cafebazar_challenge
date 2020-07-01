@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.android.babakmhz.cafebazarchallenge.R
 import com.android.babakmhz.cafebazarchallenge.data.db.LocationModel
 import com.android.babakmhz.cafebazarchallenge.databinding.FragmentListLocationsBinding
@@ -37,6 +38,10 @@ class MainFragment : DaggerFragment(), callBack {
     private lateinit var viewModel: MainViewModel
     private lateinit var fragmentMainBinding: FragmentListLocationsBinding
 
+    private val detailsRecyclerViewAdapter: DetailsRecyclerViewAdapter by lazy {
+        DetailsRecyclerViewAdapter(this@MainFragment.context!!, emptyList(), this)
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,10 +60,27 @@ class MainFragment : DaggerFragment(), callBack {
         viewModel.locations.observe(viewLifecycleOwner, locationsObserver)
         viewModel.loading.observe(viewLifecycleOwner, loadingObserver)
         viewModel.myLocation.observe(viewLifecycleOwner, userLocationObserver)
+        viewModel.isRecyclerViewUpdating.observe(viewLifecycleOwner, recyclerLoadingObserver)
 
 
         return fragmentMainBinding.root
 
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        recycler_items.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val visibleItemCount = layoutManager.childCount
+                val pastVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
+                val total = recyclerView.adapter?.itemCount
+                if (visibleItemCount + pastVisibleItem >= total!!) {
+                    viewModel.getLocationsFromRemoteSource(true)
+                }
+                super.onScrolled(recyclerView, dx, dy)
+            }
+        })
     }
 
     private val locationsObserver = Observer<LiveDataWrapper<List<LocationModel>>> {
@@ -67,7 +89,8 @@ class MainFragment : DaggerFragment(), callBack {
                 context, LinearLayoutManager.VERTICAL,
                 false
             )
-            recycler_items.adapter = DetailsRecyclerViewAdapter(context!!, it.response, this)
+            detailsRecyclerViewAdapter.addItems(it.response)
+            recycler_items.adapter = detailsRecyclerViewAdapter
         }
     }
 
@@ -84,6 +107,15 @@ class MainFragment : DaggerFragment(), callBack {
         } else {
             progress.visibility = View.GONE
             text_latlng.text = viewModel.myLocation.value
+        }
+
+    }
+    private val recyclerLoadingObserver = Observer<Boolean> {
+        AppLogger.i("LOADING PROGRESS IN MAIN FRAGMENT IS $it")
+        if (it) {
+            progressRecycler.visibility = View.VISIBLE
+        } else {
+            progressRecycler.visibility = View.GONE
         }
 
     }

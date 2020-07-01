@@ -22,6 +22,7 @@ class MainViewModel @Inject constructor(
     private val job = SupervisorJob()
     private val uiScope = CoroutineScope(ioDispatcher + job)
 
+    private var recyclerOffset = 1
 
     private var _locationPermission = MutableLiveData<Boolean>()
     val locationPermission: LiveData<Boolean> get() = _locationPermission
@@ -46,6 +47,9 @@ class MainViewModel @Inject constructor(
 
     private var _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
+
+    private var _isRecyclerViewUpdating = MutableLiveData<Boolean>()
+    val isRecyclerViewUpdating: LiveData<Boolean> = _isRecyclerViewUpdating
 
 
     fun requestLocationPermission() {
@@ -77,6 +81,11 @@ class MainViewModel @Inject constructor(
         _locationPermission.value = false
         _loading.value = false
         _error.value = false
+        _isRecyclerViewUpdating.value = false
+    }
+
+    fun handleRecyclerScroll(){
+
     }
 
     fun init() {
@@ -99,6 +108,36 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun getLocationsFromRemoteSource(nextPage: Boolean = false) {
+
+        if (nextPage){
+            recyclerOffset += 1
+            _isRecyclerViewUpdating.value = true
+        }
+
+        uiScope.launch {
+            withContext(Dispatchers.IO) {
+                try {
+                    val response = useCase.getLocationFromRemoteSource(null, recyclerOffset)
+                    _locations.postValue(LiveDataWrapper.success(response!!))
+
+                    if (recyclerOffset == 1)
+                        useCase.clearDbTable()
+
+                    useCase.saveLocations(response)
+
+                    if (_currentFragment.value !is MainFragment)
+                        _currentFragment.postValue(MainFragment.newInstance())
+
+                } catch (ex: Exception) {
+                    AppLogger.e(ex, "Exception Happened")
+                    _error.postValue(true)
+                    _locations.postValue(LiveDataWrapper.error(ex))
+                }
+            }
+            _isRecyclerViewUpdating.postValue(false)
+        }
+    }
 
     fun handleLocationUpdates(lastKnownLocation: Location?) {
 
@@ -106,29 +145,14 @@ class MainViewModel @Inject constructor(
         _error.value = false
 
         uiScope.launch {
-            withContext(Dispatchers.IO) {
-                if (useCase.shouldRequestLocationUpdates(lastKnownLocation)) {
-                    try {
-                        val response = useCase.getLocationFromRemoteSource(lastKnownLocation)
-                        _locations.postValue(LiveDataWrapper.success(response!!))
-                        useCase.saveLocations(response)
-
-                        if (_currentFragment.value !is MainFragment)
-                            _currentFragment.postValue(MainFragment.newInstance())
-
-                        _myLocation.postValue("${lastKnownLocation?.latitude},${lastKnownLocation?.longitude}")
-                    } catch (ex: Exception) {
-                        AppLogger.e(ex, "Exception Happened")
-                        _error.postValue(true)
-                        _locations.postValue(LiveDataWrapper.error(ex))
-                    }
-
-                }
-
-                _loading.postValue(false)
-
+            if (useCase.shouldRequestLocationUpdates(lastKnownLocation)) {
+                recyclerOffset = 1
+                getLocationsFromRemoteSource()
             }
         }
+
+        _loading.postValue(false)
+
     }
 
 }

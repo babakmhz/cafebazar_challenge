@@ -18,8 +18,12 @@ class MainUseCase @Inject constructor(
     private val apiService: ApiService
 ) {
 
-    suspend fun saveLocations(locations: List<LocationModel>) {
+    suspend fun clearDbTable() {
+
         db.clearLocationTable()
+    }
+
+    suspend fun saveLocations(locations: List<LocationModel>) {
         db.insertLocations(locations)
     }
 
@@ -27,23 +31,32 @@ class MainUseCase @Inject constructor(
         return db.getAllLocations()
     }
 
-    suspend fun getLocationFromRemoteSource(location: Location?): List<LocationModel>? {
+    suspend fun getLocationFromRemoteSource(
+        location: Location?,
+        offset: Int = 1
+    ): List<LocationModel>? {
 
-        if (location == null) return null
+        var latLng: LatLng
+
+        latLng = if (location == null) {
+            AppUtils.getLatLngFromString(prefs.getLastKnownLocation())!!
+        } else {
+            LatLng(location.latitude, location.longitude)
+        }
 
         val apiResult = apiService.getLocation(
             CLIENT_ID,
             CLIENT_SECRET,
             V,
-            "${location.latitude},${location.longitude}",
-            LIMIT
+            "${latLng.latitude},${latLng.longitude}",
+            LIMIT, offset
         )
 
         if (apiResult.meta.code != 200) {
             return null
         }
 
-        prefs.setLastKnownLocation("${location.latitude},${location.longitude}")
+        prefs.setLastKnownLocation("${latLng.latitude},${latLng.longitude}")
         return resolveApiObjectToDbModel(apiResult)
 
     }

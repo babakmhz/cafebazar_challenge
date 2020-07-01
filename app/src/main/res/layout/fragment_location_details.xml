@@ -19,6 +19,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
+
             android:layout_height="wrap_content">
 
             <ImageView
@@ -48,6 +49,7 @@
             <TextView
                 android:id="@+id/text_county"
                 android:layout_width="wrap_content"
+                android:textAlignment="viewStart"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/standard_margin"
                 android:layout_marginTop="@dimen/standard_margin"
@@ -60,7 +62,7 @@
 
             <TextView
                 android:id="@+id/text_county_value"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/standard_margin"
                 android:layout_marginTop="@dimen/standard_margin"
@@ -68,7 +70,9 @@
                 android:maxLines="1"
                 android:text="@{viewModel.selectedLocation.location.country}"
                 android:textColor="#fff"
+                android:textAlignment="viewStart"
                 android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/text_county"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="iran" />
@@ -79,6 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/standard_margin"
                 android:layout_marginTop="@dimen/standard_margin"
+                android:textAlignment="viewStart"
                 android:text="city :"
                 android:textColor="#fff"
                 android:textSize="18sp"
@@ -88,8 +93,9 @@
 
             <TextView
                 android:id="@+id/text_city_value"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:textAlignment="viewStart"
                 android:layout_marginStart="@dimen/standard_margin"
                 android:ellipsize="end"
                 android:maxLines="1"
@@ -97,6 +103,7 @@
                 android:textColor="#fff"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@id/text_city"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/text_city"
                 app:layout_constraintTop_toTopOf="@id/text_city"
                 tools:text="iran" />
@@ -111,25 +118,28 @@
                 android:text="address:"
                 android:textColor="#fff"
                 android:textSize="18sp"
+                android:textAlignment="viewStart"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_city" />
 
             <TextView
                 android:id="@+id/text_address_value"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/standard_margin"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="@{viewModel.selectedLocation.location.formattedAddress}"
                 android:textColor="#fff"
+                android:layout_marginEnd="@dimen/standard_margin"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@id/text_address"
+                android:textAlignment="viewStart"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/text_address"
                 app:layout_constraintTop_toTopOf="@id/text_address"
                 tools:text="iran" />
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

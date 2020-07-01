@@ -15,7 +15,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 
 class DetailsRecyclerViewAdapter(
     private val context: Context,
-    private val locations: List<LocationModel>,
+    private var locations: List<LocationModel>,
     private val callback: callBack
 ) : RecyclerView.Adapter<DetailsRecyclerViewAdapter.viewHolder>() {
 
@@ -27,6 +27,12 @@ class DetailsRecyclerViewAdapter(
 
     override fun getItemCount(): Int {
         return this.locations.size
+    }
+
+    fun addItems(items: List<LocationModel>) {
+        locations += items
+        locations.sortedBy { it.location.distance }
+        notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: viewHolder, position: Int) {
