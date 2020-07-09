@@ -211,7 +211,7 @@ class MainActivity : DaggerAppCompatActivity(), GoogleApiClient.ConnectionCallba
     @SuppressLint("MissingPermission")
     private fun getLastKnownLocation() {
         locationClient.lastLocation.addOnSuccessListener {
-            AppLogger.i("THIS IS LAST KNOWN LOCATION ${it.latitude},${it.longitude}")
+//            AppLogger.i("THIS IS LAST KNOWN LOCATION ${it.latitude},${it.longitude}")
             viewModel.handleLocationUpdates(it)
         }
     }

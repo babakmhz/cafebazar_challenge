@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.babakmhz.cafebazarchallenge.R
 import com.android.babakmhz.cafebazarchallenge.data.db.LocationModel
 import com.android.babakmhz.cafebazarchallenge.databinding.ItemsTemplateBinding
+import com.android.babakmhz.cafebazarchallenge.utils.AppLogger
 import com.bumptech.glide.Glide
 import de.hdodenhof.circleimageview.CircleImageView
 import java.util.*
@@ -39,6 +40,7 @@ class DetailsRecyclerViewAdapter(
         locations.addAll(items)
         locations.sortedBy { it.location.distance }
         notifyDataSetChanged()
+        AppLogger.i("LOCATION SIZE ${locations.size}")
     }
 
     override fun onBindViewHolder(holder: viewHolder, position: Int) {
